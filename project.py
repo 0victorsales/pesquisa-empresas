@@ -3,36 +3,29 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import pandas as pd
 import time
-#import pyperclip
+from lista import discionario
 
 
 navegador = webdriver.Chrome('chromedriver')
+
 #acessando site 
 navegador.get('https://cnpj.biz/')
 
 #criando data frame
 df_excel = pd.read_excel("CNPJ.xlsx")
-planilha = pd.DataFrame(columns=["Cnpj", "Razão", "Mei", "simples", "capital", "email", "telefone", "bairro", "cep", "cidade", "estado"])
 
+#descobrindo tamanho da planilha para execução do loop
 tamanho = df_excel.shape[0]
 
-#criando arrays das litas
-cnpj_list = []
-razao_list = []
-mei_list = []
-simples_list = []
-capital_list = []
-email_list = []
-telefone_list = []
-bairro_list = []
-cep_list = []
-cidade_list = []
-estado_list = []
-texto = []
+
+#criando um dicionário vazio
+dados = {}
 
 
 
+i = 0
 
+#inicio do loop para capturar dados do site
 for cont in range(0, tamanho):
 
     #clica na barra de pesquisa
@@ -43,7 +36,7 @@ for cont in range(0, tamanho):
         except:
             time.sleep(0.001)
    
-   #adiciona o elemento da planilha na variavel
+   #adiciona o elemento da planilha na variavel 
     pesquisa_cnpj = str(df_excel.loc[cont]['LISTA'])
    
    #pesquisa cnpj
@@ -71,146 +64,45 @@ for cont in range(0, tamanho):
             time.sleep(0.001)
     print(cnpj)
 
-    planilha.loc[0, "Cnpj"] = cnpj
-    #adicionando cnpj a  lista cnpj
-    #cnpj_list.append(cnpj)
     
-    #adicionando cnpj na coluna da planilha
-    #planilha["Cnpj"] = cnpj_list
-
+    dados[pesquisa_cnpj] = {'CNPJ': cnpj}
     
-    #copiando Razão Social
+    #copiando Razão Social 
     #NOTE - copiando Razão Social
     i = 2
     while True:
         try:
-            variavel = navegador.find_element(By.XPATH, f'/html/body/div[1]/div/div/div[2]/div[1]/p[{i}]').text
+            #loop para capturar dados do site
+            for num in range(22): 
+                cha = navegador.find_element(By.XPATH, f'/html/body/div[1]/div/div/div[2]/div[1]/p[{i}]').text
+                i +=1
+                
+                #loop para comparar e adicionar dados no dicionário
+                for chave, valor in discionario.items():
                     
+                    #comparando se o valor do site é o mesmo do dicionário
+                    if chave in cha:
+                        dados[pesquisa_cnpj][chave] = cha
+                        
+                        print(cha) 
+                        break     
             break
-            i +=1  
+          
         except:
             time.sleep(0.001)
-           
-    razao_social =  navegador.find_element(By.XPATH, f'/html/body/div[1]/div/div/div[2]/div[1]/p[{i}]/div/b').text   
-    print(razao_social)
-    #adicionando razao social a lista razao social
-    #razao_list.append(razao_social)
-    planilha.loc[0, "Razão"] = razao_social
-    #adicionando razão social na coluna da planilha
-    #planilha["Razão Social"] = razao_list
-        
-        
-
-    #copiando Mei
-    while True:
-        try:
-            mei = navegador.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/div[1]/p[6]/b').text
-            break
-        except:
-            time.sleep(0.001)
-    print(mei)
-    #adicionando Mei a lista Mei
-    #mei_list.append(mei)
-    planilha.loc[0, "Mei"] = mei
-    #adicionando Mei na coluna da planilha
-    #planilha["MEI"] = mei_list
-
     
-
-    #copiando Simples Nacional
-    while True:
-        try:
-            simples = navegador.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/div[1]/p[7]/b').text
-            break
-        except:
-            time.sleep(0.001)
-    print(simples)
-    #adicionando Simples Nacional a lista simples
-    #simples_list.append(simples)
-    planilha.loc[0, "simples"] = simples
-    #adicionando Simples Nacional na coluna da planilha
-    #planilha["Simples Nacional"] = simples_list
-
-    
-
-    #copiando capital da empresa
-    while True:
-        try:
-            capital = navegador.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/div[1]/p[8]/div/b').text
-            break
-        except:
-            time.sleep(0.001)
-    print(capital)
-    #adicionando capital da empresa a lista capital
-    #capital_list.append(capital)
-    planilha.loc[0, "capital"] = capital
-    #adicionando capital na coluna da planilha 
-    #planilha["Capital Social"] = capital_list
-
-
-
-    #copiando E-mail
-    while True:
-        try:
-            email = navegador.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/div[1]/p[12]/div/b').text
-            break
-        except:
-            time.sleep(0.001)
-    print(email)
-    #adicionando email a lista email
-    #email_list.append(email)
-    planilha.loc[0, "email"] = email
-    #adicionando email na coluna da planilha
-    #planilha["E-mail"] = email_list
-
-
-    #copiando bairro
-    while True:
-        try:
-            bairro = navegador.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/div[1]/p[16]/div/b').text
-            break
-        except:
-            time.sleep(0.001)
-    print(bairro)
-    #adicionando bairro a lista bairro
-    #bairro_list.append(bairro)
-    planilha.loc[0, "Bairro"] = bairro
-    #adicionando bairro na coluna da planilha
-    #planilha["Bairro"] = bairro_list
-
-
-
-    #copiando cidade
-    while True:
-        try:
-            cidade = navegador.find_element(By.XPATH,'/html/body/div[1]/div/div/div[2]/div[1]/p[18]/b/a').text
-            break
-        except:
-            time.sleep(0.001)
-    print(cidade)
-    #adicionando cidade a lista cidade
-    #cidade_list.append(cidade)
-    planilha.loc[0, "cidade"] = cidade
-    #adicionando cidade na coluna da planilha
-    #planilha["CIdade"] = cidade_list
-
-
-
-    #copiando estado 
-    while True:
-        try:
-            estado =  navegador.find_element(By.XPATH, '/html/body/div[1]/div/div/div[2]/div[1]/p[19]/b/a').text
-            break
-        except:
-            time.sleep(0.001)
-    print(estado)
-    #adicionando bairro a lista bairro
-    #estado_list.append(bairro)
-    planilha.loc[0, "estado"] = estado
-    #adicionando bairro na coluna da planilha 
-    #planilha["|Bairro"] = bairro_list
-
-
     #recarregar pagina
-    navegador.get('https://cnpj.biz/')
+    navegador.get('https://cnpj.biz/')       
+    
+         
+        
+
+    
+
+#criando data frame com os dados do dicionário  
+planilha = pd.DataFrame.from_dict(dados, orient='index')
+
+
+print(planilha)
+#planilha.to_excel("dados2.xlsx", index=False)
 
