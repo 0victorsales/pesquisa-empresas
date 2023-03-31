@@ -1,5 +1,5 @@
 discionario = {
-    "CNPJ:": "",
+    
     "Razão Social:": "",
     "Opção pelo MEI:": "",
     "Opção pelo Simples:": "",

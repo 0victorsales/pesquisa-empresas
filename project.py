@@ -72,28 +72,29 @@ def automacao(file_path):
         
        
         i = 2
-        while True:
-            try:
-                #loop para capturar dados do site
-                for num in range(22): 
-                    cha = navegador.find_element(By.XPATH, f'/html/body/div[1]/div/div/div[2]/div[1]/p[{i}]').text
+        
+        #loop para capturar dados do site
+        for num in range(22): 
+            while True:
+                try:
+                    elemento = navegador.find_element(By.XPATH, f'/html/body/div[1]/div/div/div[2]/div[1]/p[{i}]').text
                     i +=1
-                    
-                    #loop para comparar e adicionar dados no dicionário
-                    for chave, valor in discionario.items():
-                        
-                        #comparando se o valor do site é o mesmo do dicionário
-                        if chave in cha:
-                            split_cha = cha.split(":")
-                            nova_cha = split_cha[1].strip()
-                            dados[pesquisa_cnpj][chave] = nova_cha
-                            print(nova_cha)
-                           
-                            break     
-                break
+                    break
+                except:
+                    time.sleep(0.001)
             
-            except:
-                time.sleep(0.001)
+            #loop para comparar e adicionar dados no dicionário
+            for chave, valor in discionario.items():
+                
+                #comparando se o valor do site é o mesmo do dicionário
+                if chave in elemento:
+                    split_elemento = elemento.split(":")
+                    novo_elemento = split_elemento[1].strip()
+                    dados[pesquisa_cnpj][chave] = novo_elemento
+                    print(novo_elemento)
+                    
+                    break     
+              
         
         #recarregar pagina
         navegador.get('https://cnpj.biz/')       
