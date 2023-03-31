@@ -65,7 +65,7 @@ def automacao(file_path):
                 break
             except:
                 time.sleep(0.001)
-        print(cnpj)
+        
 
         #adicionando valor de cnpj no dicionário
         dados[pesquisa_cnpj] = {'CNPJ': cnpj}
@@ -91,7 +91,7 @@ def automacao(file_path):
                     split_elemento = elemento.split(":")
                     novo_elemento = split_elemento[1].strip()
                     dados[pesquisa_cnpj][chave] = novo_elemento
-                    print(novo_elemento)
+                    
                     
                     break     
               

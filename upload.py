@@ -5,7 +5,9 @@ import os
 
 
 #criando janela
-root = tk.Tk()
+janela = tk.Tk()
+janela.geometry("300x300")
+janela.config(background="#9932CC")
 
 #criando a função para fazer upload do arquivo
 def open_file():
@@ -23,9 +25,10 @@ def open_file():
 
 
 #criando botão
-open_button = tk.Button(root, text="Abrir arquivo", command=open_file)
+open_button = tk.Button(janela, text="Abrir arquivo", command=open_file,width=30, height=3)
+
 
 #adicionando botão na tele principal
-open_button.pack()
+open_button.place(relx=0.5, rely=0.5, anchor='center')
 
-root.mainloop()
+janela.mainloop()
